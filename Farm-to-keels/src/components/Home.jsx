@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "./Navbar";
 
 function Home() {
   return (
@@ -12,7 +11,7 @@ function Home() {
         <h1 className="text-6xl font-extrabold text-black drop-shadow-lg mb-8 ml-1">
           Farm To Keells Super
         </h1>
-        <p className="text-2xl text-gray-800 mt-6 font-bold mr-9">
+        <p className="text-2xl text-gray-800 mt-6 font-bold mr-9 ">
           Direct Selling Platform
         </p>
 
