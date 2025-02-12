@@ -3,7 +3,7 @@ import FarmerRegister from "./components/FarmerRegister";
 import Home from "./components/Home";
 import Footer from "./components/footer";
 import Navbar from "./components/Navbar";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FarmerLogin from "./components/FarmerLogin";
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
     <>
       <Navbar />
       {/* <FarmerRegister /> */}
-      <Home />
+      {/* <Home /> */}
       {/* <FarmerLogin /> */}
       {/* <Footer /> */}
     </>

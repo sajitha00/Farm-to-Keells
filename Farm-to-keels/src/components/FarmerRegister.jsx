@@ -7,8 +7,8 @@ function FarmerRegister() {
       style={{ backgroundImage: "url(src/assets/background.jpg)" }}
     >
       {/* Transparent Form Container */}
-      <div className="bg-white bg-opacity-70 p-9 pr-5 pl-5 rounded-3xl shadow-lg w-full max-w-md opacity-80">
-        <h2 className="text-2xl font-bold text-center mb-5 text-gray-900">
+      <div className="bg-white bg-opacity-70 p-5 pr-5 pl-5 rounded-3xl shadow-lg w-full max-w-md opacity-80">
+        <h2 className="text-2xl font-bold text-center mb-4 text-gray-900">
           Farmer Registration
         </h2>
 
