@@ -36,7 +36,11 @@ function Home() {
         {/* Admin Link */}
         <p className="mt-8 text-black text-base  font-bold mr-7">
           Are you a Keells Admin?{" "}
-          <a href="#" className="text-blue-600 hover:underline">
+          <a
+            href="/AdminLogin"
+            onClick={() => navigate("AdminLogin")}
+            className="text-blue-600 hover:underline"
+          >
             Click Here
           </a>
         </p>
