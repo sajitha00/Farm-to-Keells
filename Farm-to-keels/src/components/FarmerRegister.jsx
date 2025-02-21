@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { supabase } from "../services/supabaseClient";
+import { farmerService } from "../services/FarmerService";
 
 const districts = [
   "Colombo",
@@ -65,7 +65,7 @@ function FarmerRegister() {
     setLoading(true);
 
     try {
-      // Validate form data
+      // Form validation
       if (formData.password !== formData.confirmPassword) {
         throw new Error("Passwords do not match!");
       }
@@ -80,30 +80,14 @@ function FarmerRegister() {
         throw new Error("All fields are required!");
       }
 
-      // 1. Sign up the user with Supabase Auth
-      const { data: authData, error: signUpError } = await supabase.auth.signUp(
-        {
-          email: formData.email,
-          password: formData.password,
-        }
-      );
+      // Call the service to handle registration
+      const result = await farmerService.registerFarmer(formData);
 
-      if (signUpError) throw signUpError;
+      if (!result.success) {
+        throw new Error(result.error);
+      }
 
-      // 2. Insert the farmer's details into the farmers table
-      const { error: insertError } = await supabase.from("farmers").insert([
-        {
-          id: authData.user.id,
-          full_name: formData.fullName,
-          email: formData.email,
-          username: formData.username,
-          location: formData.location,
-        },
-      ]);
-
-      if (insertError) throw insertError;
-
-      // Clear form and show success
+      // Clear form on success
       setFormData({
         fullName: "",
         email: "",
