@@ -1,6 +1,9 @@
 import React from "react";
+import { useState } from "react";
 
 function FarmerLogin() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   return (
     <div
       className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative"
@@ -21,6 +24,7 @@ function FarmerLogin() {
             </div>
             <div>
               <label className="block font-semibold">Password</label>
+
               <input
                 type="password"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300"

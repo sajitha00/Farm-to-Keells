@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { supabase } from "../services/supabaseClient";
 
 const districts = [
   "Colombo",
@@ -39,14 +40,15 @@ function FarmerRegister() {
   });
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const dropdownRef = useRef(null);
 
-  // Handle form inputs
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -57,14 +59,67 @@ function FarmerRegister() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+    setError(null);
+    setLoading(true);
+
+    try {
+      // Validate form data
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error("Passwords do not match!");
+      }
+
+      if (
+        !formData.fullName ||
+        !formData.email ||
+        !formData.username ||
+        !formData.location ||
+        !formData.password
+      ) {
+        throw new Error("All fields are required!");
+      }
+
+      // 1. Sign up the user with Supabase Auth
+      const { data: authData, error: signUpError } = await supabase.auth.signUp(
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      if (signUpError) throw signUpError;
+
+      // 2. Insert the farmer's details into the farmers table
+      const { error: insertError } = await supabase.from("farmers").insert([
+        {
+          id: authData.user.id,
+          full_name: formData.fullName,
+          email: formData.email,
+          username: formData.username,
+          location: formData.location,
+        },
+      ]);
+
+      if (insertError) throw insertError;
+
+      // Clear form and show success
+      setFormData({
+        fullName: "",
+        email: "",
+        username: "",
+        location: "",
+        password: "",
+        confirmPassword: "",
+      });
+
+      alert("Registration successful!");
+    } catch (error) {
+      setError(error.message);
+      alert(`Registration failed: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
-    console.log("Form Submitted:", formData);
   };
 
   return (
@@ -72,13 +127,17 @@ function FarmerRegister() {
       className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative"
       style={{ backgroundImage: "url('src/assets/background.jpg')" }}
     >
-      {/* Transparent Form Container */}
       <div className="bg-white bg-opacity-80 p-6 rounded-3xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-5 text-gray-900">
           Farmer Registration
         </h2>
 
-        {/* Registration Form */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <input
             type="text"
@@ -87,7 +146,9 @@ function FarmerRegister() {
             value={formData.fullName}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+            disabled={loading}
           />
+
           <input
             type="email"
             name="email"
@@ -95,7 +156,9 @@ function FarmerRegister() {
             value={formData.email}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+            disabled={loading}
           />
+
           <input
             type="text"
             name="username"
@@ -103,9 +166,9 @@ function FarmerRegister() {
             value={formData.username}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+            disabled={loading}
           />
 
-          {/* Location Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <input
               type="text"
@@ -113,8 +176,9 @@ function FarmerRegister() {
               name="location"
               value={formData.location}
               readOnly
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              onClick={() => !loading && setIsDropdownOpen(!isDropdownOpen)}
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none cursor-pointer"
+              disabled={loading}
             />
 
             {isDropdownOpen && (
@@ -135,29 +199,56 @@ function FarmerRegister() {
             )}
           </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-          />
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+              disabled={loading}
+            />
 
-          {/* Register Button */}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
+              disabled={loading}
+            >
+              {showPassword ? "👁️" : "🙈"}
+            </button>
+          </div>
+
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+              disabled={loading}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
+              disabled={loading}
+            >
+              {showConfirmPassword ? "👁️" : "🙈"}
+            </button>
+          </div>
+
           <button
             type="submit"
-            className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition duration-300"
+            className={`w-full ${
+              loading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
+            } text-white py-2 rounded-lg transition duration-300`}
+            disabled={loading}
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
       </div>
