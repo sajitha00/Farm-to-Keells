@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { farmerService } from "../services/FarmerService";
 import { useNavigate } from "react-router-dom";
+import FarmerDashboard from "./FarmerDashboard";
 
 function FarmerLogin() {
   const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ function FarmerLogin() {
 
       // If login is successful, navigate to the dashboard
       alert("Login successful!");
-      // navigate("/dashboard"); // Replace with your dashboard route
+      navigate("/FarmerDashboard"); // Replace with your dashboard route
     } catch (error) {
       setError(error.message);
       alert(`Login failed: ${error.message}`);

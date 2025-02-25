@@ -1,11 +1,12 @@
 import { useState } from "react";
-import FarmerRegister from "./components/FarmerRegister";
+import FarmerRegister from "./pages/FarmerRegister";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import AdminLogin from "./components/AdminLogin";
+import Home from "./pages/Home";
+import AdminLogin from "./pages/AdminLogin";
 import Footer from "./components/footer";
 import Navbar from "./components/Navbar";
-import FarmerLogin from "./components/FarmerLogin";
+import FarmerLogin from "./pages/FarmerLogin";
+import FarmerDashboard from "./pages/FarmerDashboard";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,11 +17,13 @@ function App() {
       {/* <FarmerRegister /> */}
       {/* <Home /> */}
       {/* <FarmerLogin /> */}
+      {/* <FarmerDashboard /> */}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/FarmerRegister" element={<FarmerRegister />} />
           <Route path="/FarmerLogin" element={<FarmerLogin />} />
+          <Route path="/FarmerDashboard" element={<FarmerDashboard />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
         </Routes>
       </BrowserRouter>
