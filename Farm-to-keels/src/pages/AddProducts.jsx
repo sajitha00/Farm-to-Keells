@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddProducts = () => {
+  const navigate = useNavigate();
   const [productType, setProductType] = useState("");
   return (
     <div
@@ -81,7 +83,7 @@ const AddProducts = () => {
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
-          className="absolute bottom-6 left-6 text-black font-medium hover:underline"
+          className="absolute bottom-6 left-6 bg-gray-300 hover:bg-gray-400 text-pink-950 font-semibold px-4 py-2 rounded-lg transition"
         >
           Back
         </button>
