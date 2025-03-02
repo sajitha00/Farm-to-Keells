@@ -87,7 +87,7 @@ const AddProducts = () => {
           </div>
 
           <div className="flex flex-col text-left">
-            <label className="font-semibold">Supply Quantity</label>
+            <label className="font-semibold">Supply Quantity (Kg)</label>
             <input
               type="number"
               value={quantity}
