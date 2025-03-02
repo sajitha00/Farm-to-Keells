@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { farmerService } from "../services/FarmerService";
 import { useNavigate } from "react-router-dom";
 import FarmerDashboard from "./FarmerDashboard";
+import { useFarmer } from "../context/FarmerProvider";
 
 function FarmerLogin() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ function FarmerLogin() {
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const { loginFarmer } = useFarmer();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,6 +36,7 @@ function FarmerLogin() {
       if (!result.success) {
         throw new Error(result.error);
       }
+      loginFarmer(result.data);
 
       // If login is successful, navigate to the dashboard
       alert("Login successful!");

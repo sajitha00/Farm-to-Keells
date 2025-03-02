@@ -1,18 +1,18 @@
-import { supabase } from './supabaseClient';
+import { supabase } from "./supabaseClient";
 
 export const farmerService = {
   // Register Farmer
   async registerFarmer(farmerData) {
     try {
-      const { error } = await supabase
-        .from('farmers')
-        .insert([{
+      const { error } = await supabase.from("farmers").insert([
+        {
           full_name: farmerData.fullName,
           email: farmerData.email,
           username: farmerData.username,
           location: farmerData.location,
           password: farmerData.password,
-        }]);
+        },
+      ]);
 
       if (error) throw error;
       return { success: true };
@@ -26,9 +26,9 @@ export const farmerService = {
     try {
       // Fetch the farmer record from Supabase based on the username
       const { data, error } = await supabase
-        .from('farmers')
-        .select('*')
-        .eq('username', username);
+        .from("farmers")
+        .select("*")
+        .eq("username", username);
 
       if (error) throw error;
 
@@ -36,6 +36,8 @@ export const farmerService = {
       if (!data || data.length === 0) {
         throw new Error("Username or password is incorrect.");
       }
+
+      console.log(data);
 
       // Check if the password matches
       if (data[0].password !== password) {

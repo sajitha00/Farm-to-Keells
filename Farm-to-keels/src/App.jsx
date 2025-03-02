@@ -8,29 +8,34 @@ import Navbar from "./components/Navbar";
 import FarmerLogin from "./pages/FarmerLogin";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import AddProducts from "./pages/AddProducts";
+import { FarmerProvider } from "./context/FarmerProvider";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <Navbar />
-      {/* <FarmerRegister /> */}
-      {/* <Home /> */}
-      {/* <FarmerLogin /> */}
-      {/* <FarmerDashboard /> */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/FarmerRegister" element={<FarmerRegister />} />
-          <Route path="/FarmerLogin" element={<FarmerLogin />} />
-          <Route path="/FarmerDashboard" element={<FarmerDashboard />} />
-          <Route path="/AddProducts" element={<AddProducts />} />
-          <Route path="/AdminLogin" element={<AdminLogin />} />
-        </Routes>
-      </BrowserRouter>
-      {/* <AddProducts /> */}
-      {/* <Footer /> */}
+      <FarmerProvider>
+        <Navbar />
+        {/* <FarmerRegister /> */}
+        {/* <Home /> */}
+        {/* <FarmerLogin /> */}
+        {/* <FarmerDashboard /> */}
+
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/FarmerRegister" element={<FarmerRegister />} />
+            <Route path="/FarmerLogin" element={<FarmerLogin />} />
+            <Route path="/FarmerDashboard" element={<FarmerDashboard />} />
+            <Route path="/AddProducts" element={<AddProducts />} />
+            <Route path="/AdminLogin" element={<AdminLogin />} />
+          </Routes>
+        </BrowserRouter>
+
+        {/* <AddProducts /> */}
+        {/* <Footer /> */}
+      </FarmerProvider>
     </>
   );
 }

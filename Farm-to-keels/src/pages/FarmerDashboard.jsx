@@ -1,9 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardCard from "../components/DashboardCard";
+import { useFarmer } from "../context/FarmerProvider";
 
 const FarmerDashboard = () => {
   const navigate = useNavigate();
+
+  const { farmer, isLoggedIn, logoutFarmer } = useFarmer();
   const dashboardItems = [
     {
       title: "Place Your Orders",
@@ -16,6 +19,12 @@ const FarmerDashboard = () => {
     { title: "Manage Profile", icon: "src/assets/manageProfile.png" },
   ];
 
+  if (!isLoggedIn) {
+    return <p>Please log in to view your profile</p>;
+  }
+
+  console.log(farmer);
+
   return (
     <div
       className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative"
@@ -23,6 +32,13 @@ const FarmerDashboard = () => {
     >
       {/* Card Container */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6 bg-opacity-80 w-full max-w-4xl">
+        {/* <div>
+          <h2>Welcome, {farmer.full_name}</h2>
+          <p>Email: {farmer.email}</p>
+          <p>Location: {farmer.location}</p>
+          <button onClick={logoutFarmer}>Logout</button>
+        </div> */}
+
         {dashboardItems.map((item, index) => (
           <DashboardCard
             key={index}

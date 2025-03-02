@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../services/supabaseClient"; // Import Supabase client
+import { useFarmer } from "../context/FarmerProvider";
 
 const AddProducts = () => {
   const navigate = useNavigate();
@@ -9,12 +10,14 @@ const AddProducts = () => {
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [state, setState] = useState("");
+  const { farmer, isLoggedIn, logoutFarmer } = useFarmer();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { data, error } = await supabase.from("products").insert([
       {
+        farmer_id: farmer.id,
         product_name: product,
         product_type: productType,
         quantity: quantity,
@@ -41,7 +44,9 @@ const AddProducts = () => {
     setPrice("");
     setState("");
   };
-
+  if (!isLoggedIn) {
+    return <p>Please log in to view your profile</p>;
+  }
   return (
     <div
       className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative px-4"
