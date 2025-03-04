@@ -24,7 +24,7 @@ function App() {
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/Contact" element={<Contact />} />
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
       </BrowserRouter>
     </FarmerProvider>
   );
