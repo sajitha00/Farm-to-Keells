@@ -8,6 +8,7 @@ import FarmerLogin from "./pages/FarmerLogin";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import AddProducts from "./pages/AddProducts";
 import AdminLogin from "./pages/AdminLogin";
+import SuperMarketDashboard from "./pages/SuperMarketDashboard";
 import { FarmerProvider } from "./context/FarmerProvider";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/Contact" element={<Contact />} />
         </Routes>
+        <SuperMarketDashboard />
         {/* <Footer /> */}
       </BrowserRouter>
     </FarmerProvider>
