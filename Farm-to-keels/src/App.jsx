@@ -10,6 +10,7 @@ import AddProducts from "./pages/AddProducts";
 import AdminLogin from "./pages/AdminLogin";
 import SuperMarketDashboard from "./pages/SuperMarketDashboard";
 import { FarmerProvider } from "./context/FarmerProvider";
+import ViewProduct from "./pages/ViewProduct";
 
 function App() {
   return (
@@ -24,8 +25,14 @@ function App() {
           <Route path="/AddProducts" element={<AddProducts />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route
+            path="/SuperMarketDashboard"
+            element={<SuperMarketDashboard />}
+          />
+          <Route path="/ViewProduct" element={<ViewProduct />} />
         </Routes>
-        <SuperMarketDashboard />
+        {/* <ViewProduct /> */}
+        {/* <SuperMarketDashboard /> */}
         {/* <Footer /> */}
       </BrowserRouter>
     </FarmerProvider>

@@ -13,7 +13,11 @@ const FarmerDashboard = () => {
       icon: "src/assets/order.png",
       path: "/AddProducts",
     },
-    { title: "View Orders", icon: "src/assets/view_order.png" },
+    {
+      title: "View Orders",
+      icon: "src/assets/view_order.png",
+      path: "/ViewProduct",
+    },
     { title: "Notifications", icon: "src/assets/notofications1.png" },
     { title: "Payments", icon: "src/assets/payment.png" },
     { title: "Manage Profile", icon: "src/assets/manageProfile.png" },
