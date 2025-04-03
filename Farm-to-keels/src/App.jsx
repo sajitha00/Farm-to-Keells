@@ -11,9 +11,12 @@ import AdminLogin from "./pages/AdminLogin";
 import SuperMarketDashboard from "./pages/SuperMarketDashboard";
 import { FarmerProvider } from "./context/FarmerProvider";
 import ViewProduct from "./pages/ViewProduct";
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+const queryClient = new QueryClient();
 function App() {
   return (
+    <QueryClientProvider client={queryClient}>
+      
     <FarmerProvider>
       <BrowserRouter>
         <Navbar />
@@ -36,6 +39,7 @@ function App() {
         {/* <Footer /> */}
       </BrowserRouter>
     </FarmerProvider>
+    </QueryClientProvider>
   );
 }
 

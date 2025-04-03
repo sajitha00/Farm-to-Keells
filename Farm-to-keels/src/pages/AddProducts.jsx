@@ -1,52 +1,64 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../services/supabaseClient"; // Import Supabase client
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addProduct } from "../services/productService";
 import { useFarmer } from "../context/FarmerProvider";
 
 const AddProducts = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [productType, setProductType] = useState("");
   const [product, setProduct] = useState("");
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [state, setState] = useState("");
-  const { farmer, isLoggedIn, logoutFarmer } = useFarmer();
+  const { farmer, isLoggedIn } = useFarmer();
+
+  const mutation = useMutation({
+    mutationFn: (productData) => addProduct(productData),
+    onSuccess: () => {
+      // Invalidate and refetch products for this farmer
+      queryClient.invalidateQueries({
+        queryKey: ['products', farmer?.id]
+      });
+      alert("Product added successfully!");
+      navigate(-1);
+    },
+    onError: (error) => {
+      console.error("Error adding product:", error);
+      alert("Failed to add product. Please try again.");
+    }
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!farmer) return;
+    
+    const productData = {
+      farmer_id: farmer.id,
+      product_name: product,
+      product_type: productType,
+      quantity: quantity,
+      price: price,
+      state: state,
+    };
 
-    const { data, error } = await supabase.from("products").insert([
-      {
-        farmer_id: farmer.id,
-        product_name: product,
-        product_type: productType,
-        quantity: quantity,
-        price: price,
-        state: state,
-      },
-    ]);
-
-    if (error) {
-      console.error("Error adding product:", error);
-      alert("Failed to place order. Please try again."); // Alert for error
-    } else {
-      console.log("Product added successfully:", data);
-      alert("Order placed successfully!"); // Alert for success
-      navigate(-1); // Navigate back after successful submission
-    }
+    mutation.mutate(productData);
   };
 
   const handleReset = () => {
-    // Clear all form fields
     setProduct("");
     setProductType("");
     setQuantity("");
     setPrice("");
     setState("");
   };
+
   if (!isLoggedIn) {
     return <p>Please log in to view your profile</p>;
   }
+
   return (
     <div
       className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative px-4"
@@ -118,21 +130,24 @@ const AddProducts = () => {
               required
             />
           </div>
+          {/* ... (keep all your existing form fields exactly as they are) ... */}
 
           {/* Buttons */}
           <div className="flex justify-between mt-6">
             <button
-              type="button" // Change type to "button" to prevent form submission
-              onClick={handleReset} // Add onClick handler for reset
+              type="button"
+              onClick={handleReset}
               className="bg-gray-300 hover:bg-gray-400 text-pink-950 font-semibold px-4 py-2 rounded-lg transition"
+              disabled={mutation.isPending}
             >
               Reset
             </button>
             <button
               type="submit"
               className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+              disabled={mutation.isPending}
             >
-              Place
+              {mutation.isPending ? 'Adding...' : 'Place'}
             </button>
           </div>
         </form>
@@ -141,6 +156,7 @@ const AddProducts = () => {
         <button
           onClick={() => navigate(-1)}
           className="absolute bottom-6 left-6 bg-gray-300 hover:bg-gray-400 text-pink-950 font-semibold px-4 py-2 rounded-lg transition"
+          disabled={mutation.isPending}
         >
           Back
         </button>
