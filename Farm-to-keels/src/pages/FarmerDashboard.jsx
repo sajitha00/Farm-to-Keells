@@ -20,7 +20,7 @@ const FarmerDashboard = () => {
     },
     { title: "Notifications", icon: "src/assets/notofications1.png" },
     { title: "Payments", icon: "src/assets/payment.png" },
-    { title: "Manage Profile", icon: "src/assets/manageProfile.png" },
+    { title: "Manage Profile", icon: "src/assets/manageProfile.png",path:"/ManageProfile" },
   ];
 
   if (!isLoggedIn) {

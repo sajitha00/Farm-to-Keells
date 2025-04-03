@@ -12,6 +12,7 @@ import SuperMarketDashboard from "./pages/SuperMarketDashboard";
 import { FarmerProvider } from "./context/FarmerProvider";
 import ViewProduct from "./pages/ViewProduct";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import ManageProfile from "./pages/ManageProfile";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             element={<SuperMarketDashboard />}
           />
           <Route path="/ViewProduct" element={<ViewProduct />} />
+          <Route path="/ManageProfile" element={<ManageProfile />} />
         </Routes>
         {/* <ViewProduct /> */}
         {/* <SuperMarketDashboard /> */}
