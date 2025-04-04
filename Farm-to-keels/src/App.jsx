@@ -13,6 +13,7 @@ import { FarmerProvider } from "./context/FarmerProvider";
 import ViewProduct from "./pages/ViewProduct";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ManageProfile from "./pages/ManageProfile";
+import ViewFarmers from "./pages/ViewFarmer";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         {/* <ViewProduct /> */}
         {/* <SuperMarketDashboard /> */}
         {/* <Footer /> */}
+        {/* <ViewFarmers /> */}
       </BrowserRouter>
     </FarmerProvider>
     </QueryClientProvider>

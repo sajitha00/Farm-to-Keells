@@ -34,6 +34,11 @@ const FarmerDashboard = () => {
       className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative"
       style={{ backgroundImage: "url('src/assets/background.jpg')" }}
     >
+     <div className="w-full max-w-4xl pl-6">
+        <h1 className="text-2xl font-bold text-gray-800">
+          Welcome, <span className="text-gray-800">{farmer.full_name}</span>
+        </h1>
+      </div>
       {/* Card Container */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6 bg-opacity-80 w-full max-w-4xl">
         {/* <div>
