@@ -1,63 +1,118 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { supabase } from "../services/supabaseClient";
 
-const SRI_LANKAN_DISTRICTS = [
-  "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale",
-  "Nuwara Eliya", "Galle", "Matara", "Hambantota", "Jaffna",
-  "Kilinochchi", "Mannar", "Vavuniya", "Mullaitivu", "Batticaloa",
-  "Ampara", "Trincomalee", "Kurunegala", "Puttalam", "Anuradhapura",
-  "Polonnaruwa", "Badulla", "Monaragala", "Ratnapura", "Kegalle"
+const districts = [
+  "Colombo",
+  "Gampaha",
+  "Kalutara",
+  "Kandy",
+  "Matale",
+  "Nuwara Eliya",
+  "Galle",
+  "Matara",
+  "Hambantota",
+  "Jaffna",
+  "Kilinochchi",
+  "Mannar",
+  "Vavuniya",
+  "Mullaitivu",
+  "Batticaloa",
+  "Ampara",
+  "Trincomalee",
+  "Kurunegala",
+  "Puttalam",
+  "Anuradhapura",
+  "Polonnaruwa",
+  "Badulla",
+  "Monaragala",
+  "Ratnapura",
+  "Kegalle",
 ];
 
-// Mock data - replace with your actual data
-const MOCK_FARMERS = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    district: "Colombo",
-    products: ["Tomatoes", "Carrots"]
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
-    district: "Kandy",
-    products: ["Apples", "Bananas"]
-  },
-  // Add more mock data as needed
-];
+const ViewFarmer = () => {
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [farmers, setFarmers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedFarmer, setSelectedFarmer] = useState(null);
+  const [farmerProducts, setFarmerProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(false);
 
-const ViewFarmers = () => {
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const fetchFarmersByLocation = async () => {
+    if (!selectedDistrict) return;
 
-  // Filter farmers based on district and search term
-  const filteredFarmers = MOCK_FARMERS.filter(farmer => {
-    const matchesDistrict = !selectedDistrict || farmer.district === selectedDistrict;
-    const matchesSearch = !searchTerm || 
-      farmer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      farmer.email.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesDistrict && matchesSearch;
-  });
+    setLoading(true);
+    setError(null);
 
+    try {
+      const { data, error } = await supabase
+        .from("farmers")
+        .select("id, full_name, location, phone_number, email, avatar_url")
+        .ilike("location", `%${selectedDistrict}%`);
+
+      if (error) throw error;
+
+      setFarmers(data || []);
+    } catch (err) {
+      setError(err.message);
+      console.error("Error fetching farmers:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchFarmerProducts = async (farmerId) => {
+    setProductsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("product_name, product_type, quantity, price, state")
+        .eq("farmer_id", farmerId);
+
+      if (error) throw error;
+
+      setFarmerProducts(data || []);
+    } catch (err) {
+      setError(err.message);
+      console.error("Error fetching products:", err);
+    } finally {
+      setProductsLoading(false);
+    }
+  };
+
+  const handleFarmerClick = async (farmer) => {
+    setSelectedFarmer(farmer);
+    await fetchFarmerProducts(farmer.id);
+  };
+
+  useEffect(() => {
+    if (selectedDistrict) {
+      fetchFarmersByLocation();
+    } else {
+      setFarmers([]);
+    }
+  }, [selectedDistrict]);
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">View Farmers</h1>
-      
-      {/* Filter Controls */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {/* District Filter */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Filter by District
-          </label>
+    <div
+      className="min-h-screen flex flex-col items-center bg-cover bg-center p-4 pt-26"
+      style={{ backgroundImage: "url('src/assets/background.jpg')" }}
+    >
+      <div className="max-w-5xl mx-auto bg-white p-6 rounded-2xl shadow-xl">
+        <h1 className="text-3xl font-bold text-center mb-6">
+          Please Select Your Location
+        </h1>
+
+        {/* Filter Section */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
           <select
             value={selectedDistrict}
             onChange={(e) => setSelectedDistrict(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           >
-            <option value="">All Districts</option>
-            {SRI_LANKAN_DISTRICTS.map((district) => (
+            <option value="" disabled>
+              Select District
+            </option>
+            {districts.map((district) => (
               <option key={district} value={district}>
                 {district}
               </option>
@@ -65,87 +120,123 @@ const ViewFarmers = () => {
           </select>
         </div>
 
-        {/* Search Filter */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Search Farmers
-          </label>
-          <input
-            type="text"
-            placeholder="Search by name or email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
-          />
-        </div>
-      </div>
+        {/* Loading and Error States */}
+        {loading && (
+          <div className="text-center text-gray-600 text-lg mt-4">
+            Loading farmers...
+          </div>
+        )}
 
-      {/* Results Count */}
-      <div className="mb-4">
-        <p className="text-sm text-gray-600">
-          Showing {filteredFarmers.length} farmers
-          {selectedDistrict && ` in ${selectedDistrict}`}
-        </p>
-      </div>
+        {error && (
+          <div className="text-center text-red-500 text-lg mt-4">
+            Error: {error}
+          </div>
+        )}
 
-      {/* Farmers List */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Farmer
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Contact
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                District
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Products
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredFarmers.length > 0 ? (
-              filteredFarmers.map((farmer) => (
-                <tr key={farmer.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{farmer.name}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                    {farmer.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                    {farmer.district}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex flex-wrap gap-1">
-                      {farmer.products.map((product, index) => (
-                        <span 
-                          key={index}
-                          className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded"
-                        >
-                          {product}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
+        {/* Results Section */}
+        {!loading && !error && farmers.length === 0 ? (
+          <div className="text-center text-gray-600 text-lg mt-4">
+            {selectedDistrict
+              ? "No farmers found in this district."
+              : "Please select a district to view farmers."}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr className="bg-green-600 text-white">
+                  <th className="p-3">Farmer Name</th>
+                  <th className="p-3">District</th>
+                  <th className="p-3">Contact</th>
+                  <th className="p-3">Email</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="px-6 py-4 text-center text-gray-500">
-                  No farmers found matching your criteria
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {farmers.map((farmer, index) => (
+                  <tr
+                    key={farmer.id}
+                    onClick={() => handleFarmerClick(farmer)}
+                    className={`border-b cursor-pointer ${
+                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } hover:bg-gray-100`}
+                  >
+                    <td className="p-3 flex items-center gap-2">
+                      {farmer.avatar_url && (
+                        <img
+                          src={farmer.avatar_url}
+                          alt={farmer.full_name}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      )}
+                      {farmer.full_name}
+                    </td>
+                    <td className="p-3">{farmer.location}</td>
+                    <td className="p-3">
+                      {farmer.phone_number || "Not provided"}
+                    </td>
+                    <td className="p-3">{farmer.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
+
+      {/* Product Modal */}
+      {selectedFarmer && (
+        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md relative max-h-[80vh] overflow-y-auto">
+            <button
+              onClick={() => {
+                setSelectedFarmer(null);
+                setFarmerProducts([]);
+              }}
+              className="absolute top-2 right-3 text-gray-600 hover:text-red-500 text-xl"
+            >
+              ×
+            </button>
+            <h3 className="text-xl font-bold mb-4">
+              Products by {selectedFarmer.full_name}
+            </h3>
+
+            {productsLoading ? (
+              <div className="text-center py-4">Loading products...</div>
+            ) : farmerProducts.length === 0 ? (
+              <div className="text-center py-4 text-gray-500">
+                No products found for this farmer.
+              </div>
+            ) : (
+              <ul className="space-y-3">
+                {farmerProducts.map((product, idx) => (
+                  <li
+                    key={idx}
+                    className="border p-3 rounded bg-gray-50 shadow-sm"
+                  >
+                    <div className="font-bold">{product.product_name}</div>
+                    <div>Type: {product.product_type}</div>
+                    <div>Quantity: {product.quantity}</div>
+                    <div>Price: LKR {product.price}</div>
+                    <div>Location: {product.state}</div>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* Action Button */}
+            <button
+              onClick={() =>
+                alert(`Order placed with ${selectedFarmer.full_name}!`)
+              }
+              className="w-full mt-4 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition"
+            >
+              Place Order
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ViewFarmers;
+export default ViewFarmer;

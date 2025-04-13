@@ -7,7 +7,11 @@ const SuperMarketDashboard = () => {
 
   // Define dashboard options
   const dashboardItems = [
-    { title: "View Farmer", icon: "src/assets/viewfarmer.png" },
+    {
+      title: "View Farmer",
+      icon: "src/assets/viewfarmer.png",
+      path: "/ViewFarmer",
+    },
     {
       title: "View Placed Orders",
       icon: "src/assets/vieworder.png",
