@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../services/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 const districts = [
   "Colombo",
@@ -30,6 +31,7 @@ const districts = [
 ];
 
 const ViewFarmer = () => {
+  const navigate = useNavigate();
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [farmers, setFarmers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -37,6 +39,7 @@ const ViewFarmer = () => {
   const [selectedFarmer, setSelectedFarmer] = useState(null);
   const [farmerProducts, setFarmerProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
 
   const fetchFarmersByLocation = async () => {
     if (!selectedDistrict) return;
@@ -63,10 +66,11 @@ const ViewFarmer = () => {
 
   const fetchFarmerProducts = async (farmerId) => {
     setProductsLoading(true);
+    setSelectedProducts([]); // Reset selections when fetching new products
     try {
       const { data, error } = await supabase
         .from("products")
-        .select("product_name, product_type, quantity, price, state")
+        .select("id, product_name, product_type, quantity, price, state")
         .eq("farmer_id", farmerId);
 
       if (error) throw error;
@@ -85,6 +89,63 @@ const ViewFarmer = () => {
     await fetchFarmerProducts(farmer.id);
   };
 
+  const handleProductSelect = (productId, isSelected) => {
+    if (isSelected) {
+      setSelectedProducts([...selectedProducts, productId]);
+    } else {
+      setSelectedProducts(selectedProducts.filter((id) => id !== productId));
+    }
+  };
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedProducts(farmerProducts.map((product) => product.id));
+    } else {
+      setSelectedProducts([]);
+    }
+  };
+
+  const handlePlaceOrder = async () => {
+    if (selectedProducts.length === 0) {
+      alert("Please select at least one product to place an order");
+      return;
+    }
+
+    const selectedItems = farmerProducts.filter((product) =>
+      selectedProducts.includes(product.id)
+    );
+
+    // Calculate total amount
+    const total = selectedItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    try {
+      const { data, error } = await supabase
+        .from("orders")
+        .insert([
+          {
+            farmer_id: selectedFarmer.id,
+            items: selectedItems,
+            total_amount: total,
+            status: "pending",
+          },
+        ])
+        .select();
+
+      if (error) throw error;
+
+      alert(`Order placed successfully!`);
+      setSelectedProducts([]);
+      setSelectedFarmer(null);
+      navigate("/SuperMarketDashboard"); // Redirect to home page
+    } catch (err) {
+      console.error("Error placing order:", err);
+      alert("Failed to place order. Please try again.");
+    }
+  };
+
   useEffect(() => {
     if (selectedDistrict) {
       fetchFarmersByLocation();
@@ -92,6 +153,7 @@ const ViewFarmer = () => {
       setFarmers([]);
     }
   }, [selectedDistrict]);
+
   return (
     <div
       className="min-h-screen flex flex-col items-center bg-cover bg-center p-4 pt-26"
@@ -102,7 +164,6 @@ const ViewFarmer = () => {
           Please Select Your Location
         </h1>
 
-        {/* Filter Section */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
           <select
             value={selectedDistrict}
@@ -120,7 +181,6 @@ const ViewFarmer = () => {
           </select>
         </div>
 
-        {/* Loading and Error States */}
         {loading && (
           <div className="text-center text-gray-600 text-lg mt-4">
             Loading farmers...
@@ -133,7 +193,6 @@ const ViewFarmer = () => {
           </div>
         )}
 
-        {/* Results Section */}
         {!loading && !error && farmers.length === 0 ? (
           <div className="text-center text-gray-600 text-lg mt-4">
             {selectedDistrict
@@ -183,7 +242,6 @@ const ViewFarmer = () => {
         )}
       </div>
 
-      {/* Product Modal */}
       {selectedFarmer && (
         <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md relative max-h-[80vh] overflow-y-auto">
@@ -191,6 +249,7 @@ const ViewFarmer = () => {
               onClick={() => {
                 setSelectedFarmer(null);
                 setFarmerProducts([]);
+                setSelectedProducts([]);
               }}
               className="absolute top-2 right-3 text-gray-600 hover:text-red-500 text-xl"
             >
@@ -207,31 +266,74 @@ const ViewFarmer = () => {
                 No products found for this farmer.
               </div>
             ) : (
-              <ul className="space-y-3">
-                {farmerProducts.map((product, idx) => (
-                  <li
-                    key={idx}
-                    className="border p-3 rounded bg-gray-50 shadow-sm"
-                  >
-                    <div className="font-bold">{product.product_name}</div>
-                    <div>Type: {product.product_type}</div>
-                    <div>Quantity: {product.quantity}</div>
-                    <div>Price: LKR {product.price}</div>
-                    <div>Location: {product.state}</div>
-                  </li>
-                ))}
-              </ul>
+              <div>
+                <div className="flex items-center mb-3">
+                  <input
+                    type="checkbox"
+                    id="selectAll"
+                    checked={
+                      selectedProducts.length === farmerProducts.length &&
+                      farmerProducts.length > 0
+                    }
+                    onChange={handleSelectAll}
+                    className="mr-2 h-4 w-4 text-green-600 rounded focus:ring-green-500"
+                  />
+                  <label htmlFor="selectAll" className="font-medium">
+                    Select All Products
+                  </label>
+                  <span className="ml-auto text-sm text-gray-600">
+                    {selectedProducts.length} selected
+                  </span>
+                </div>
+
+                <ul className="space-y-3">
+                  {farmerProducts.map((product) => (
+                    <li
+                      key={product.id}
+                      className="border p-3 rounded bg-gray-50 shadow-sm"
+                    >
+                      <div className="flex items-start">
+                        <input
+                          type="checkbox"
+                          checked={selectedProducts.includes(product.id)}
+                          onChange={(e) =>
+                            handleProductSelect(product.id, e.target.checked)
+                          }
+                          className="mt-1 mr-2 h-4 w-4 text-green-600 rounded focus:ring-green-500"
+                        />
+                        <div className="flex-1">
+                          <div className="font-bold">
+                            {product.product_name}
+                          </div>
+                          <div>Type: {product.product_type}</div>
+                          <div>Quantity: {product.quantity}</div>
+                          <div>Price: LKR {product.price}</div>
+                          <div>Location: {product.state}</div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
 
-            {/* Action Button */}
-            <button
-              onClick={() =>
-                alert(`Order placed with ${selectedFarmer.full_name}!`)
-              }
-              className="w-full mt-4 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition"
-            >
-              Place Order
-            </button>
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded transition"
+              >
+                Back
+              </button>
+              <button
+                onClick={handlePlaceOrder}
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded transition"
+                disabled={selectedProducts.length === 0}
+              >
+                {selectedProducts.length > 0
+                  ? `Place Order (${selectedProducts.length})`
+                  : "Place Order"}
+              </button>
+            </div>
           </div>
         </div>
       )}

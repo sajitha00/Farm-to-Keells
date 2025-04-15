@@ -14,6 +14,7 @@ import ViewProduct from "./pages/ViewProduct";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ManageProfile from "./pages/ManageProfile";
 import ViewFarmers from "./pages/ViewFarmer";
+import ViewPlacedOrders from "./pages/ViewPlacedOrders";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/ViewProduct" element={<ViewProduct />} />
             <Route path="/ManageProfile" element={<ManageProfile />} />
             <Route path="/ViewFarmer" element={<ViewFarmers />} />
+            <Route path="/ViewPlacedOrders" element={<ViewPlacedOrders />} />
           </Routes>
           {/* <ViewProduct /> */}
           {/* <SuperMarketDashboard /> */}
