@@ -120,7 +120,11 @@ const ViewPlacedOrders = () => {
                         <div>
                           <div>{order.farmers?.full_name || "Unknown"}</div>
                           <div className="text-sm text-gray-600">
-                            {order.farmers?.phone_number || "No contact"}
+                            {order.farmers?.email || "No Email Provided"}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {order.farmers?.phone_number ||
+                              "No Contact Provided"}
                           </div>
                         </div>
                       </div>

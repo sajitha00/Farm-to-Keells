@@ -24,6 +24,9 @@ const SuperMarketDashboard = () => {
       icon: "src/assets/notofications1.png",
     },
   ];
+  const handleLogout = () => {
+    navigate("/"); // Redirect to login page
+  };
 
   return (
     <div
@@ -40,6 +43,12 @@ const SuperMarketDashboard = () => {
           />
         ))}
       </div>
+      <button
+        onClick={() => handleLogout()}
+        className="absolute bottom-6 right-6 bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+      >
+        Log Out
+      </button>
     </div>
   );
 };

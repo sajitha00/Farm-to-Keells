@@ -39,12 +39,13 @@ function App() {
             <Route path="/ManageProfile" element={<ManageProfile />} />
             <Route path="/ViewFarmer" element={<ViewFarmers />} />
             <Route path="/ViewPlacedOrders" element={<ViewPlacedOrders />} />
+            <Route path="/AboutUs" element={<AboutUs />} />
           </Routes>
           {/* <ViewProduct /> */}
           {/* <SuperMarketDashboard /> */}
           {/* <Footer /> */}
           {/* <ViewFarmers /> */}
-          <AboutUs />
+          {/* <AboutUs /> */}
         </BrowserRouter>
       </FarmerProvider>
     </QueryClientProvider>

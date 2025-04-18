@@ -21,10 +21,10 @@ const AboutUs = () => {
             <h1 className="text-4xl font-bold text-gray-800 mb-4">About Us</h1>
             <p className="text-gray-600 mb-6">
               We are <strong>Keells Super</strong>, a leading supermarket chain
-              in Sri Lanka, powered by the John Keells Group. Our mission is to
-              eliminate intermediaries and build a direct farm-to-supermarket
-              selling system. This empowers local farmers and ensures freshness
-              and fair pricing for everyone.
+              in Sri Lanka, powered by the John Keells Group.This project our
+              mission is to eliminate intermediaries and build a direct farm to
+              supermarket selling system. This empowers local farmers and
+              ensures freshness and fair pricing for everyone.
             </p>
 
             {/* Button Section */}
