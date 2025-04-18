@@ -5,8 +5,8 @@ import { useFarmer } from "../context/FarmerProvider";
 
 const FarmerDashboard = () => {
   const navigate = useNavigate();
-
   const { farmer, isLoggedIn, logoutFarmer } = useFarmer();
+
   const dashboardItems = [
     {
       title: "Place Your Orders",
@@ -18,36 +18,49 @@ const FarmerDashboard = () => {
       icon: "src/assets/view_order.png",
       path: "/ViewProduct",
     },
-    { title: "Notifications", icon: "src/assets/notofications1.png" },
-    { title: "Payments", icon: "src/assets/payment.png" },
-    { title: "Manage Profile", icon: "src/assets/manageProfile.png",path:"/ManageProfile" },
+    {
+      title: "Notifications",
+      icon: "src/assets/notofications1.png",
+    },
+    {
+      title: "Payments",
+      icon: "src/assets/payment.png",
+    },
+    {
+      title: "Manage Profile",
+      icon: "src/assets/manageProfile.png",
+      path: "/ManageProfile",
+    },
   ];
 
   if (!isLoggedIn) {
-    return <p>Please log in to view your profile</p>;
+    return (
+      <p className="text-center mt-10 text-lg">
+        Please log in to view your profile
+      </p>
+    );
   }
 
-  console.log(farmer);
+  // 🔓 Logout Handler
+  const handleLogout = () => {
+    logoutFarmer(); // Clear farmer context
+    navigate("/FarmerLogin"); // Redirect to login page
+  };
 
   return (
     <div
-      className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative"
+      className="min-h-screen flex flex-col items-center justify-start bg-cover bg-center relative px-4 pt-28 pb-6"
       style={{ backgroundImage: "url('src/assets/background.jpg')" }}
     >
-     <div className="w-full max-w-4xl pl-6">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Welcome, <span className="text-gray-800">{farmer.full_name}</span>
+      {/* Greeting */}
+      <div className="w-full max-w-4xl mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 drop-shadow">
+          Welcome, <span className=" text-gray-800">{farmer.full_name}</span>
         </h1>
       </div>
-      {/* Card Container */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6 bg-opacity-80 w-full max-w-4xl">
-        {/* <div>
-          <h2>Welcome, {farmer.full_name}</h2>
-          <p>Email: {farmer.email}</p>
-          <p>Location: {farmer.location}</p>
-          <button onClick={logoutFarmer}>Logout</button>
-        </div> */}
 
+      {/* Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-4xl">
         {dashboardItems.map((item, index) => (
           <DashboardCard
             key={index}
@@ -59,8 +72,11 @@ const FarmerDashboard = () => {
       </div>
 
       {/* Logout Button */}
-      <button className="absolute bottom-12 right-15 left px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition">
-        Logout
+      <button
+        onClick={() => handleLogout()}
+        className="absolute bottom-6 right-6 bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+      >
+        Log Out
       </button>
     </div>
   );

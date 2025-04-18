@@ -15,6 +15,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ManageProfile from "./pages/ManageProfile";
 import ViewFarmers from "./pages/ViewFarmer";
 import ViewPlacedOrders from "./pages/ViewPlacedOrders";
+import AboutUs from "./pages/AboutUs";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           {/* <SuperMarketDashboard /> */}
           {/* <Footer /> */}
           {/* <ViewFarmers /> */}
+          <AboutUs />
         </BrowserRouter>
       </FarmerProvider>
     </QueryClientProvider>

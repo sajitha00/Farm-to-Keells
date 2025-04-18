@@ -19,7 +19,7 @@ const AddProducts = () => {
     onSuccess: () => {
       // Invalidate and refetch products for this farmer
       queryClient.invalidateQueries({
-        queryKey: ['products', farmer?.id]
+        queryKey: ["products", farmer?.id],
       });
       alert("Product added successfully!");
       navigate(-1);
@@ -27,14 +27,14 @@ const AddProducts = () => {
     onError: (error) => {
       console.error("Error adding product:", error);
       alert("Failed to add product. Please try again.");
-    }
+    },
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!farmer) return;
-    
+
     const productData = {
       farmer_id: farmer.id,
       product_name: product,
@@ -147,7 +147,7 @@ const AddProducts = () => {
               className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? 'Adding...' : 'Place'}
+              {mutation.isPending ? "Adding..." : "Place"}
             </button>
           </div>
         </form>

@@ -139,7 +139,7 @@ const ViewFarmer = () => {
       alert(`Order placed successfully!`);
       setSelectedProducts([]);
       setSelectedFarmer(null);
-      navigate("/SuperMarketDashboard"); // Redirect to home page
+      navigate("/SuperMarketDashboard"); // Redirect to home     page
     } catch (err) {
       console.error("Error placing order:", err);
       alert("Failed to place order. Please try again.");

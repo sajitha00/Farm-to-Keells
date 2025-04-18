@@ -11,10 +11,16 @@ function Navbar() {
 
       {/* Desktop Navigation */}
       <div className="hidden md:flex space-x-6">
-        <Link to="/" className="text-black font-bold hover:text-green-600">
+        <Link
+          to="/AboutUs"
+          className="text-black font-bold hover:text-green-600"
+        >
           About us
         </Link>
-        <Link to="/Contact" className="text-black font-bold hover:text-green-600">
+        <Link
+          to="/Contact"
+          className="text-black font-bold hover:text-green-600"
+        >
           Contact
         </Link>
       </div>
@@ -22,15 +28,18 @@ function Navbar() {
       {/* Mobile Menu Button */}
       <div className="md:hidden">
         <input type="checkbox" id="menu-toggle" className="peer hidden" />
-        
+
         {/* Hamburger Icon */}
-        <label htmlFor="menu-toggle" className="text-black font-bold text-2xl cursor-pointer">
+        <label
+          htmlFor="menu-toggle"
+          className="text-black font-bold text-2xl cursor-pointer"
+        >
           ☰
         </label>
 
         {/* Mobile Dropdown Menu */}
         <div className="absolute top-16 right-6 w-48 bg-white text-black font-bold shadow-lg rounded-xl flex-col items-start peer-checked:flex hidden transition-all duration-300">
-          <Link to="/" className="w-full py-2 px-4 hover:bg-gray-200">
+          <Link to="/AboutUs" className="w-full py-2 px-4 hover:bg-gray-200">
             About us
           </Link>
           <Link to="/Contact" className="w-full py-2 px-4 hover:bg-gray-200">
