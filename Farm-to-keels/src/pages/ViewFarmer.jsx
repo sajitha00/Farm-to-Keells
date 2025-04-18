@@ -66,7 +66,7 @@ const ViewFarmer = () => {
 
   const fetchFarmerProducts = async (farmerId) => {
     setProductsLoading(true);
-    setSelectedProducts([]); // Reset selections when fetching new products
+    setSelectedProducts([]);
     try {
       const { data, error } = await supabase
         .from("products")
@@ -122,7 +122,8 @@ const ViewFarmer = () => {
     );
 
     try {
-      const { data, error } = await supabase
+      // 1. Create the order
+      const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert([
           {
@@ -132,17 +133,36 @@ const ViewFarmer = () => {
             status: "pending",
           },
         ])
-        .select();
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (orderError) {
+        console.error("Order creation error:", orderError);
+        throw orderError;
+      }
 
-      alert(`Order placed successfully!`);
+      // 2. Create notification for the farmer
+      const { error: notifError } = await supabase
+        .from("notifications")
+        .insert({
+          farmer_id: selectedFarmer.id,
+          message: `New order received for ${selectedItems.length} items (Total: LKR ${total})`,
+          order_id: order.id,
+          type: "order",
+        });
+
+      if (notifError) {
+        console.error("Notification creation error:", notifError);
+        throw notifError;
+      }
+
+      alert(`Order placed successfully! Farmer has been notified.`);
       setSelectedProducts([]);
       setSelectedFarmer(null);
-      navigate("/SuperMarketDashboard"); // Redirect to home     page
+      navigate("/SuperMarketDashboard");
     } catch (err) {
-      console.error("Error placing order:", err);
-      alert("Failed to place order. Please try again.");
+      console.error("Full error details:", err);
+      alert(`Failed to place order: ${err.message}`);
     }
   };
 

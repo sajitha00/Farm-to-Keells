@@ -16,6 +16,7 @@ import ManageProfile from "./pages/ManageProfile";
 import ViewFarmers from "./pages/ViewFarmer";
 import ViewPlacedOrders from "./pages/ViewPlacedOrders";
 import AboutUs from "./pages/AboutUs";
+import FarmerNotification from "./pages/FarmerNotification";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -40,12 +41,17 @@ function App() {
             <Route path="/ViewFarmer" element={<ViewFarmers />} />
             <Route path="/ViewPlacedOrders" element={<ViewPlacedOrders />} />
             <Route path="/AboutUs" element={<AboutUs />} />
+            <Route
+              path="/FarmerNotification"
+              element={<FarmerNotification />}
+            />
           </Routes>
           {/* <ViewProduct /> */}
           {/* <SuperMarketDashboard /> */}
           {/* <Footer /> */}
           {/* <ViewFarmers /> */}
           {/* <AboutUs /> */}
+          {/* <FarmerNotification /> */}
         </BrowserRouter>
       </FarmerProvider>
     </QueryClientProvider>
