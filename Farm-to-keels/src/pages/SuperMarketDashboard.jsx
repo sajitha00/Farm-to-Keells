@@ -17,7 +17,11 @@ const SuperMarketDashboard = () => {
       icon: "src/assets/vieworder.png",
       path: "/ViewPlacedOrders",
     },
-    { title: "Analytics", icon: "src/assets/analytics.png" },
+    {
+      title: "Analytics",
+      icon: "src/assets/analytics.png",
+      path: "/Analytics",
+    },
     { title: "Payments", icon: "src/assets/payment.png" },
     {
       title: "Notifications",
