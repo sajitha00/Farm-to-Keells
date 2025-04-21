@@ -22,7 +22,7 @@ const SuperMarketDashboard = () => {
       icon: "src/assets/analytics.png",
       path: "/Analytics",
     },
-    { title: "Payments", icon: "src/assets/payment.png" },
+    { title: "Payments", icon: "src/assets/payment.png", path: "/Payment" },
     {
       title: "Notifications",
       icon: "src/assets/notofications1.png",

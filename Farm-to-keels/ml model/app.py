@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)  # ✅ Enable CORS
 
 # Load dataset
-df = pd.read_csv('farm_to_keels_demand_data.csv')
+df = pd.read_csv('farm_to_keels_demand_2022_2024.csv')
 
 # Encode categorical variables
 df['location_code'] = pd.Categorical(df['location']).codes
