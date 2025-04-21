@@ -63,11 +63,21 @@ const ViewPlacedOrders = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center bg-cover bg-center p-4 pt-26"
-      style={{ backgroundImage: "url('src/assets/background.jpg')" }}
+      className="min-h-screen flex flex-col items-center bg-cover bg-center p-4 pt-24"
+      style={{
+        background: "linear-gradient(to right, #e0f8e9, #c6f6d5)",
+      }}
     >
-      <div className="max-w-6xl w-full bg-white p-6 rounded-2xl shadow-xl">
-        <h1 className="text-3xl font-bold text-center mb-6">Placed Orders</h1>
+      <div className="max-w-6xl w-full bg-white p-6 rounded-2xl shadow-2xl relative">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/SuperMarketDashboard")}
+          className="absolute left-6 top-6 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm font-medium transition duration-200 flex items-center gap-2"
+        >
+          ← Back to Dashboard
+        </button>
+
+        <h1 className="text-3xl font-bold text-center mb-10">Placed Orders</h1>
 
         {loading ? (
           <div className="text-center text-gray-600 text-lg mt-4">
@@ -82,58 +92,59 @@ const ViewPlacedOrders = () => {
             No orders found.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left">
+          <div className="overflow-x-auto rounded-xl border border-gray-200">
+            <table className="w-full text-left border-collapse overflow-hidden rounded-xl">
               <thead>
-                <tr className="bg-green-600 text-white">
-                  <th className="p-3">Order ID</th>
-                  <th className="p-3">Farmer</th>
-                  <th className="p-3">Date</th>
-                  <th className="p-3">Items</th>
-                  <th className="p-3">Total</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3">Actions</th>
+                <tr className="bg-green-600 text-white text-sm">
+                  <th className="p-4">Order ID</th>
+                  <th className="p-4">Farmer</th>
+                  <th className="p-4">Date</th>
+                  <th className="p-4">Items</th>
+                  <th className="p-4">Total</th>
+                  <th className="p-4">Status</th>
+                  <th className="p-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.map((order) => (
                   <tr
                     key={order.id}
-                    className={`border-b ${
+                    className={`text-sm transition-all duration-300 ${
                       order.status === "completed"
                         ? "bg-green-50"
                         : order.status === "cancelled"
                         ? "bg-red-50"
-                        : "bg-white"
+                        : "bg-white hover:bg-gray-50"
                     }`}
                   >
-                    <td className="p-3">{order.id.slice(0, 8)}...</td>
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
+                    <td className="p-4 font-mono">{order.id.slice(0, 8)}...</td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
                         {order.farmers?.avatar_url && (
                           <img
                             src={order.farmers.avatar_url}
                             alt={order.farmers.full_name}
-                            className="w-8 h-8 rounded-full object-cover"
+                            className="w-10 h-10 rounded-full object-cover border border-gray-300"
                           />
                         )}
                         <div>
-                          <div>{order.farmers?.full_name || "Unknown"}</div>
-                          <div className="text-sm text-gray-600">
-                            {order.farmers?.email || "No Email Provided"}
+                          <div className="font-semibold">
+                            {order.farmers?.full_name || "Unknown"}
                           </div>
-                          <div className="text-sm text-gray-600">
-                            {order.farmers?.phone_number ||
-                              "No Contact Provided"}
+                          <div className="text-xs text-gray-600">
+                            {order.farmers?.email || "No Email"}
+                          </div>
+                          <div className="text-xs text-gray-600">
+                            {order.farmers?.phone_number || "No Contact"}
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="p-3">
+                    <td className="p-4">
                       {new Date(order.order_date).toLocaleString()}
                     </td>
-                    <td className="p-3">
-                      <ul className="list-disc pl-4">
+                    <td className="p-4">
+                      <ul className="list-disc pl-4 space-y-1">
                         {order.items.map((item, index) => (
                           <li key={index}>
                             {item.product_name} ({item.quantity} × LKR{" "}
@@ -142,28 +153,30 @@ const ViewPlacedOrders = () => {
                         ))}
                       </ul>
                     </td>
-                    <td className="p-3">LKR {order.total_amount}</td>
-                    <td className="p-3">
+                    <td className="p-4 font-semibold">
+                      LKR {order.total_amount}
+                    </td>
+                    <td className="p-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs ${
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
                           order.status === "completed"
-                            ? "bg-green-100 text-green-800"
+                            ? "bg-green-200 text-green-900"
                             : order.status === "cancelled"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
+                            ? "bg-red-200 text-red-900"
+                            : "bg-yellow-200 text-yellow-900"
                         }`}
                       >
                         {order.status}
                       </span>
                     </td>
-                    <td className="p-3 space-x-2">
+                    <td className="p-4 space-x-2">
                       {order.status === "pending" && (
                         <>
                           <button
                             onClick={() =>
                               updateOrderStatus(order.id, "completed")
                             }
-                            className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm transition duration-200"
                           >
                             Complete
                           </button>
@@ -171,7 +184,7 @@ const ViewPlacedOrders = () => {
                             onClick={() =>
                               updateOrderStatus(order.id, "cancelled")
                             }
-                            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-sm transition duration-200"
                           >
                             Cancel
                           </button>

@@ -28,31 +28,47 @@ const SuperMarketDashboard = () => {
       icon: "src/assets/notofications1.png",
     },
   ];
+
   const handleLogout = () => {
     navigate("/"); // Redirect to login page
   };
 
   return (
     <div
-      className="h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: "url('src/assets/background.jpg')" }} // Replace with your actual image
+      className="min-h-screen flex flex-col items-center bg-cover bg-center p-4 pt-28 pb-20"
+      style={{ backgroundImage: "url('src/assets/background.jpg')" }}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl w-full">
+      {/* Header */}
+      <div className="w-full max-w-4xl mb-8 text-center">
+        <h1 className="text-3xl font-bold text-gray-800">
+          Welcome, <span className="text-gray-800">Keells Admin</span>
+        </h1>
+        <p className="text-gray-600 font-bold mt-2">
+          Access your admin dashboard
+        </p>
+      </div>
+
+      {/* Dashboard Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl">
         {dashboardItems.map((item, index) => (
           <DashboardCard
             key={index}
             title={item.title}
             icon={item.icon}
-            onClick={() => navigate(item.path)}
+            onClick={() => item.path && navigate(item.path)}
           />
         ))}
       </div>
-      <button
-        onClick={() => handleLogout()}
-        className="absolute bottom-6 right-6 bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition"
-      >
-        Log Out
-      </button>
+
+      {/* Footer Actions */}
+      <div className="fixed bottom-6 right-6">
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+        >
+          Log Out
+        </button>
+      </div>
     </div>
   );
 };

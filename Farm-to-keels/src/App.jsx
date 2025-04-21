@@ -19,6 +19,7 @@ import AboutUs from "./pages/AboutUs";
 import FarmerNotification from "./pages/FarmerNotification";
 import Analytics from "./pages/Analytics";
 import Payment from "./pages/Payment";
+// import FarmerPayments from "./components/FarmerPayments";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
             />
             <Route path="/Analytics" element={<Analytics />} />
             <Route path="/Payment" element={<Payment />} />
+            {/* <Route path="/FarmerPayments" element={<FarmerPayments />} /> */}
           </Routes>
         </BrowserRouter>
       </FarmerProvider>
