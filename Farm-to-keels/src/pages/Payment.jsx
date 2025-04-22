@@ -40,7 +40,7 @@ const Payment = () => {
     <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center p-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-green-700 mb-6 text-center">
-          Send Payment to Farmer 💸
+          Send Payment to Farmer (Paypal)
         </h2>
 
         <form onSubmit={handlePayment} className="space-y-4">
@@ -57,7 +57,9 @@ const Payment = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-semibold">Amount (USD)</label>
+            <label className="block mb-1 font-semibold">
+              Amount USD (1 USD = 300LKR)
+            </label>
             <input
               type="number"
               step="0.01"
@@ -87,7 +89,7 @@ const Payment = () => {
 
         <div className="mt-6 text-center">
           <a
-            href="/"
+            href="/SuperMarketDashboard"
             className="text-green-600 hover:underline text-sm font-medium"
           >
             ⬅ Back to Dashboard

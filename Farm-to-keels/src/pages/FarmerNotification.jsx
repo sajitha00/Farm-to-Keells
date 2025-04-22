@@ -17,11 +17,12 @@ const FarmerNotification = () => {
       try {
         setLoading(true);
 
-        // Fetch notifications
+        // Fetch notifications, excluding payment notifications
         const { data: notificationsData, error: notifError } = await supabase
           .from("notifications")
           .select("*")
           .eq("farmer_id", farmer.id)
+          .not("message", "ilike", "%Payment of%") // Exclude payment notifications
           .order("created_at", { ascending: false });
 
         if (notifError) throw notifError;
@@ -62,13 +63,16 @@ const FarmerNotification = () => {
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "INSERT", // Only listen for INSERT events
           schema: "public",
           table: "notifications",
           filter: `farmer_id=eq.${farmer.id}`,
         },
         (payload) => {
-          setNotifications((prev) => [payload.new, ...prev]);
+          // Only add the notification if it's not a payment notification
+          if (!payload.new.message.includes("Payment of")) {
+            setNotifications((prev) => [payload.new, ...prev]);
+          }
         }
       )
       .subscribe();
@@ -101,7 +105,8 @@ const FarmerNotification = () => {
         .from("notifications")
         .update({ is_read: true })
         .eq("farmer_id", farmer.id)
-        .eq("is_read", false);
+        .eq("is_read", false)
+        .not("message", "ilike", "%Payment of%"); // Only mark non-payment notifications as read
 
       if (error) throw error;
 

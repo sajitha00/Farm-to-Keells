@@ -7,7 +7,8 @@ import { supabase } from "../services/supabaseClient";
 const FarmerDashboard = () => {
   const navigate = useNavigate();
   const { farmer, isLoggedIn, logoutFarmer } = useFarmer();
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0); // For order notifications
+  const [unreadPaymentCount, setUnreadPaymentCount] = useState(0); // For payment notifications
   const [loading, setLoading] = useState(true);
 
   const dashboardItems = [
@@ -30,7 +31,8 @@ const FarmerDashboard = () => {
     {
       title: "Payments",
       icon: "src/assets/payment.png",
-      path: "/Payments",
+      path: "/FarmerPayments",
+      badge: unreadPaymentCount > 0 ? unreadPaymentCount : null, // Add badge for payments
     },
     {
       title: "Manage Profile",
@@ -45,14 +47,28 @@ const FarmerDashboard = () => {
     const fetchNotifications = async () => {
       try {
         setLoading(true);
-        const { data, error } = await supabase
+
+        // Fetch unread order notifications (excluding payment notifications)
+        const { data: orderData, error: orderError } = await supabase
           .from("notifications")
           .select("id, is_read")
           .eq("farmer_id", farmer.id)
-          .eq("is_read", false);
+          .eq("is_read", false)
+          .not("message", "ilike", "%Payment of%");
 
-        if (error) throw error;
-        setUnreadCount(data.length);
+        if (orderError) throw orderError;
+        setUnreadCount(orderData.length);
+
+        // Fetch unread payment notifications
+        const { data: paymentData, error: paymentError } = await supabase
+          .from("notifications")
+          .select("id, is_read")
+          .eq("farmer_id", farmer.id)
+          .eq("is_read", false)
+          .ilike("message", "%Payment of%");
+
+        if (paymentError) throw paymentError;
+        setUnreadPaymentCount(paymentData.length);
       } catch (err) {
         console.error("Error fetching notifications:", err);
       } finally {
@@ -73,8 +89,13 @@ const FarmerDashboard = () => {
           table: "notifications",
           filter: `farmer_id=eq.${farmer.id}`,
         },
-        () => {
-          setUnreadCount((prev) => prev + 1);
+        (payload) => {
+          // Increment the appropriate count based on the notification type
+          if (payload.new.message.includes("Payment of")) {
+            setUnreadPaymentCount((prev) => prev + 1);
+          } else {
+            setUnreadCount((prev) => prev + 1);
+          }
         }
       )
       .subscribe();
@@ -115,7 +136,7 @@ const FarmerDashboard = () => {
       {/* Dashboard Cards */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <p>Loading notifications...</p>
+          <p>Loading...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl">
