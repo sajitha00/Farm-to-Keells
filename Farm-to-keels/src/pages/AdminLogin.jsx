@@ -12,6 +12,7 @@ function AdminLogin() {
 
     // Check if username and password are correct
     if (username === "admin" && password === "admin") {
+      localStorage.setItem("supermarketUsername", "admin"); // Store admin username
       navigate("/SuperMarketDashboard"); // Redirect to the dashboard
     } else {
       setError("Invalid username or password");
