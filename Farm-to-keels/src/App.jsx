@@ -20,6 +20,7 @@ import FarmerNotification from "./pages/FarmerNotification";
 import Analytics from "./pages/Analytics";
 import Payment from "./pages/Payment";
 import FarmerPayments from "./pages/FarmerPayments";
+import SuperMarketNotification from "./pages/SuperMarketNotification";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -51,6 +52,10 @@ function App() {
             <Route path="/Analytics" element={<Analytics />} />
             <Route path="/Payment" element={<Payment />} />
             <Route path="/FarmerPayments" element={<FarmerPayments />} />
+            <Route
+              path="/SuperMarketNotification"
+              element={<SuperMarketNotification />}
+            />
           </Routes>
         </BrowserRouter>
       </FarmerProvider>

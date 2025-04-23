@@ -1,11 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DashboardCard from "../components/DashboardCard"; // Adjust path as needed
+import DashboardCard from "../components/DashboardCard";
+import { supabase } from "../services/supabaseClient";
 
 const SuperMarketDashboard = () => {
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  // Define dashboard options
+  // Fetch unread notification count
+  const fetchUnreadCount = async () => {
+    const { count, error } = await supabase
+      .from("notifications")
+      .select("*", { count: "exact", head: true })
+      .ilike("message", "Farmer%has accepted your payment%")
+      .eq("is_read", false);
+
+    if (!error) {
+      setUnreadCount(count);
+    }
+  };
+
+  // Subscribe to real-time updates
+  useEffect(() => {
+    fetchUnreadCount();
+
+    const channel = supabase
+      .channel("dashboard_notification_count")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notifications",
+        },
+        () => {
+          fetchUnreadCount();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   const dashboardItems = [
     {
       title: "View Farmer",
@@ -22,15 +60,21 @@ const SuperMarketDashboard = () => {
       icon: "src/assets/analytics.png",
       path: "/Analytics",
     },
-    { title: "Payments", icon: "src/assets/payment.png", path: "/Payment" },
+    {
+      title: "Payments",
+      icon: "src/assets/payment.png",
+      path: "/Payment",
+    },
     {
       title: "Notifications",
       icon: "src/assets/notofications1.png",
+      path: "/SuperMarketNotification",
+      badge: unreadCount,
     },
   ];
 
   const handleLogout = () => {
-    navigate("/"); // Redirect to login page
+    navigate("/");
   };
 
   return (
@@ -38,7 +82,6 @@ const SuperMarketDashboard = () => {
       className="min-h-screen flex flex-col items-center bg-cover bg-center p-4 pt-28 pb-20"
       style={{ backgroundImage: "url('src/assets/background.jpg')" }}
     >
-      {/* Header */}
       <div className="w-full max-w-4xl mb-8 text-center">
         <h1 className="text-3xl font-bold text-gray-800">
           Welcome, <span className="text-gray-800">Keells Admin</span>
@@ -48,7 +91,6 @@ const SuperMarketDashboard = () => {
         </p>
       </div>
 
-      {/* Dashboard Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl">
         {dashboardItems.map((item, index) => (
           <DashboardCard
@@ -56,11 +98,11 @@ const SuperMarketDashboard = () => {
             title={item.title}
             icon={item.icon}
             onClick={() => item.path && navigate(item.path)}
+            badge={item.badge} // Pass unread count here
           />
         ))}
       </div>
 
-      {/* Footer Actions */}
       <div className="fixed bottom-6 right-6">
         <button
           onClick={handleLogout}
