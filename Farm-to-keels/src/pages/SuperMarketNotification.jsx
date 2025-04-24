@@ -122,27 +122,29 @@ const SuperMarketNotification = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-red-600">{error}</p>
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <p className="text-lg text-red-600 text-center">{error}</p>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen pt-24 px-4 sm:px-8 bg-gradient-to-br from-green-100 to-green-200">
-      <div className="max-w-6xl mx-auto bg-white p-6 rounded-2xl shadow-xl border border-green-300 relative">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Notifications</h1>
-          <div className="flex gap-2">
+      <div className="max-w-6xl mx-auto bg-white p-4 sm:p-6 rounded-2xl shadow-xl border border-green-300">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+            Notifications
+          </h1>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <button
               onClick={markAllAsRead}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+              className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
             >
               Mark All as Read
             </button>
             <button
               onClick={handleBack}
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+              className="w-full sm:w-auto px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
             >
               Back
             </button>
@@ -154,7 +156,7 @@ const SuperMarketNotification = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
           </div>
         ) : notifications.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[60vh] overflow-auto pr-1">
             {notifications.map((notification) => {
               const match = notification.message.match(
                 /Farmer (.+) has accepted your payment of \$(\d+)\./
@@ -165,37 +167,39 @@ const SuperMarketNotification = () => {
               return (
                 <div
                   key={notification.id}
-                  className={`p-4 rounded-lg border flex flex-col sm:flex-row justify-between sm:items-center ${
+                  className={`p-4 sm:p-6 rounded-lg border flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center ${
                     !notification.is_read
                       ? "bg-blue-50 border-blue-200"
                       : "bg-white border-gray-200"
                   }`}
                 >
-                  <div>
+                  <div className="text-sm sm:text-base">
                     <h3 className="font-medium text-gray-800 mb-1">
                       Payment Accepted
                     </h3>
-                    <p className="text-gray-700">Farmer: {farmerName}</p>
+                    <p className="text-gray-700 break-words">
+                      Farmer: {farmerName}
+                    </p>
                     <p className="text-gray-700">
                       Amount: LKR {(parseInt(amount) * 300).toLocaleString()}{" "}
                       (USD {amount})
                     </p>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 mt-1">
                       {new Date(notification.created_at).toLocaleString()}
                     </p>
                   </div>
-                  <div className="flex gap-3 mt-3 sm:mt-0">
+                  <div className="flex gap-3 text-sm mt-2 sm:mt-0">
                     {!notification.is_read && (
                       <button
                         onClick={() => markAsRead(notification.id)}
-                        className="text-sm text-blue-600 hover:text-blue-800"
+                        className="text-blue-600 hover:text-blue-800"
                       >
                         Mark as Read
                       </button>
                     )}
                     <button
                       onClick={() => deleteNotification(notification.id)}
-                      className="text-sm text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800"
                     >
                       Remove
                     </button>
@@ -214,7 +218,7 @@ const SuperMarketNotification = () => {
       </div>
 
       {/* Logout Button */}
-      <div className="fixed bottom-6 right-6">
+      <div className="fixed bottom-6 right-4 sm:right-6 z-50">
         <button
           onClick={handleLogout}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
