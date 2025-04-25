@@ -21,7 +21,13 @@ import Analytics from "./pages/Analytics";
 import Payment from "./pages/Payment";
 import FarmerPayments from "./pages/FarmerPayments";
 import SuperMarketNotification from "./pages/SuperMarketNotification";
+import emailjs from "@emailjs/browser";
+
+// Initialize EmailJS with your Public Key
+emailjs.init("C4aRx3HcJU1ycYJqk"); // Replace with your EmailJS Public Key
+
 const queryClient = new QueryClient();
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

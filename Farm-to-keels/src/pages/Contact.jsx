@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -6,16 +7,51 @@ const Contact = () => {
     email: "",
     message: "",
   });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Your inquiry has been sent!");
-    setFormData({ name: "", email: "", message: "" });
+
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.message) {
+      setError("Please fill in all fields.");
+      setSuccess("");
+      return;
+    }
+
+    // Email validation (basic regex)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Please enter a valid email address.");
+      setSuccess("");
+      return;
+    }
+
+    try {
+      await emailjs.send(
+        "service_v67v45i", // Replace with your EmailJS Service ID
+        "template_ctjhht4", // Replace with your EmailJS Template ID
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        },
+        "C4aRx3HcJU1ycYJqk" // Replace with your EmailJS Public Key
+      );
+
+      setSuccess("Your inquiry has been sent successfully!");
+      setError("");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error("Error sending email:", err);
+      setError("Failed to send your inquiry. Please try again.");
+      setSuccess("");
+    }
   };
 
   return (
@@ -28,6 +64,11 @@ const Contact = () => {
         <h2 className="text-2xl font-bold text-center text-black mb-6">
           Inquiries and Support
         </h2>
+
+        {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+        {success && (
+          <p className="text-green-600 text-center mb-4">{success}</p>
+        )}
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input
