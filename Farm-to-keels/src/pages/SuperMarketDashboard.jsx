@@ -71,6 +71,11 @@ const SuperMarketDashboard = () => {
       path: "/SuperMarketNotification",
       badge: unreadCount,
     },
+    {
+      title: "Admin Guide",
+      icon: "src/assets/guide2.png",
+      path: "/",
+    },
   ];
 
   const handleLogout = () => {

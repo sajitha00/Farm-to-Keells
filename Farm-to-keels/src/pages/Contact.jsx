@@ -59,52 +59,61 @@ const Contact = () => {
       className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
       style={{ backgroundImage: "url('src/assets/background.jpg')" }}
     >
-      {/* Glassmorphism Form Container */}
-      <div className="bg-white bg-opacity-30 backdrop-blur-md p-8 rounded-4xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-black mb-6">
-          Inquiries and Support
+      {/* Main Contact Form Container */}
+      <div className="bg-white bg-opacity-20 backdrop-blur-lg p-10 rounded-3xl shadow-2xl w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-black mb-8 drop-shadow">
+          Contact Us
         </h2>
 
+        {/* Error or Success Messages */}
         {error && <p className="text-red-600 text-center mb-4">{error}</p>}
         {success && (
           <p className="text-green-600 text-center mb-4">{success}</p>
         )}
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg border bg-green-100 bg-opacity-60 focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-black"
-            required
-          />
+        {/* Form */}
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full px-5 py-3 rounded-2xl border bg-white bg-opacity-70 focus:outline-none focus:ring-4 focus:ring-green-400 placeholder-gray-600 shadow-sm"
+              required
+            />
+          </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg border bg-green-100 bg-opacity-60 focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-black"
-            required
-          />
+          <div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-5 py-3 rounded-2xl border bg-white bg-opacity-70 focus:outline-none focus:ring-4 focus:ring-green-400 placeholder-gray-600 shadow-sm"
+              required
+            />
+          </div>
 
-          <textarea
-            name="message"
-            placeholder="Message"
-            value={formData.message}
-            onChange={handleChange}
-            className="w-full px-4 py-2 rounded-lg border bg-green-100 bg-opacity-60 focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-black h-28 resize-none"
-            required
-          ></textarea>
+          <div>
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              value={formData.message}
+              onChange={handleChange}
+              className="w-full px-5 py-3 rounded-2xl border bg-white bg-opacity-70 focus:outline-none focus:ring-4 focus:ring-green-400 placeholder-gray-600 shadow-sm h-32 resize-none"
+              required
+            ></textarea>
+          </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition"
+            className="w-full bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold py-3 px-6 rounded-3xl shadow-lg transition duration-300"
           >
-            Send
+            Send Inquiry
           </button>
         </form>
       </div>

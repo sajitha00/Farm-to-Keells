@@ -39,6 +39,11 @@ const FarmerDashboard = () => {
       icon: "src/assets/manageProfile.png",
       path: "/ManageProfile",
     },
+    {
+      title: "Farmer Guide",
+      icon: "src/assets/guide2.png",
+      path: "",
+    },
   ];
 
   useEffect(() => {
