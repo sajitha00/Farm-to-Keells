@@ -22,6 +22,8 @@ import Payment from "./pages/Payment";
 import FarmerPayments from "./pages/FarmerPayments";
 import SuperMarketNotification from "./pages/SuperMarketNotification";
 import emailjs from "@emailjs/browser";
+import AdminGuide from "./pages/AdminGuide";
+import FarmerGuide from "./pages/FarmerGuide";
 
 // Initialize EmailJS with your Public Key
 emailjs.init("C4aRx3HcJU1ycYJqk"); // Replace with your EmailJS Public Key
@@ -62,6 +64,8 @@ function App() {
               path="/SuperMarketNotification"
               element={<SuperMarketNotification />}
             />
+            <Route path="/AdminGuide" element={<AdminGuide />} />
+            <Route path="/FarmerGuide" element={<FarmerGuide />} />
           </Routes>
         </BrowserRouter>
       </FarmerProvider>

@@ -42,7 +42,7 @@ const FarmerDashboard = () => {
     {
       title: "Farmer Guide",
       icon: "src/assets/guide2.png",
-      path: "",
+      path: "/FarmerGuide",
     },
   ];
 

@@ -74,7 +74,7 @@ const SuperMarketDashboard = () => {
     {
       title: "Admin Guide",
       icon: "src/assets/guide2.png",
-      path: "/",
+      path: "/AdminGuide",
     },
   ];
 
