@@ -153,7 +153,7 @@ const ViewProduct = () => {
                     <td className="p-3 flex gap-2">
                       <button
                         onClick={() => handleEdit(product)}
-                        className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition text-sm sm:px-4 sm:py-2 sm:text-base"
+                        className="bg-orange-400 text-white px-3 py-1 rounded-lg hover:bg-orange-500 transition text-sm sm:px-4 sm:py-2 sm:text-base"
                       >
                         Edit
                       </button>
