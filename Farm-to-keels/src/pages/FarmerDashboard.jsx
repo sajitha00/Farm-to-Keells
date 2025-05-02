@@ -160,7 +160,7 @@ const FarmerDashboard = () => {
       {/* Footer Actions */}
       <div className="fixed bottom-6 right-6 space-x-4">
         <button
-          onClick={() => navigate("/Help")}
+          onClick={() => navigate("/Contact")}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
         >
           Help

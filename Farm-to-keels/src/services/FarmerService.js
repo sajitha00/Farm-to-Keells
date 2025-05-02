@@ -10,6 +10,7 @@ export const farmerService = {
           email: farmerData.email,
           username: farmerData.username,
           location: farmerData.location,
+          phone_number: farmerData.phone,
           password: farmerData.password,
         },
       ]);

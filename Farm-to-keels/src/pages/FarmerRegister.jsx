@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { farmerService } from "../services/FarmerService";
+import { useNavigate } from "react-router-dom"; // ✅ Add this
 
 const districts = [
   "Colombo",
@@ -34,6 +35,7 @@ function FarmerRegister() {
     fullName: "",
     email: "",
     username: "",
+    phone: "", // ✅ New phone field
     location: "",
     password: "",
     confirmPassword: "",
@@ -45,6 +47,7 @@ function FarmerRegister() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -65,7 +68,6 @@ function FarmerRegister() {
     setLoading(true);
 
     try {
-      // Form validation
       if (formData.password !== formData.confirmPassword) {
         throw new Error("Passwords do not match!");
       }
@@ -75,29 +77,31 @@ function FarmerRegister() {
         !formData.email ||
         !formData.username ||
         !formData.location ||
+        !formData.phone ||
         !formData.password
       ) {
         throw new Error("All fields are required!");
       }
 
-      // Call the service to handle registration
       const result = await farmerService.registerFarmer(formData);
 
       if (!result.success) {
         throw new Error(result.error);
       }
 
-      // Clear form on success
+      // Clear form
       setFormData({
         fullName: "",
         email: "",
         username: "",
+        phone: "",
         location: "",
         password: "",
         confirmPassword: "",
       });
 
       alert("Registration successful!");
+      navigate("/FarmerLogin"); // ✅ REDIRECT TO LOGIN
     } catch (error) {
       setError(error.message);
       alert(`Registration failed: ${error.message}`);
@@ -108,7 +112,7 @@ function FarmerRegister() {
 
   return (
     <div
-      className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative"
+      className="h-screen flex flex-col items-center justify-center bg-cover bg-center px-4"
       style={{ backgroundImage: "url('src/assets/background.jpg')" }}
     >
       <div className="bg-white bg-opacity-80 p-6 rounded-3xl shadow-lg w-full max-w-md">
@@ -153,6 +157,18 @@ function FarmerRegister() {
             disabled={loading}
           />
 
+          {/* ✅ Phone Number Field */}
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+            disabled={loading}
+          />
+
+          {/* Location Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <input
               type="text"
@@ -183,6 +199,7 @@ function FarmerRegister() {
             )}
           </div>
 
+          {/* Password */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -193,7 +210,6 @@ function FarmerRegister() {
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
               disabled={loading}
             />
-
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -204,6 +220,7 @@ function FarmerRegister() {
             </button>
           </div>
 
+          {/* Confirm Password */}
           <div className="relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
@@ -214,7 +231,6 @@ function FarmerRegister() {
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
               disabled={loading}
             />
-
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
