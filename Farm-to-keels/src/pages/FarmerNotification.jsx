@@ -119,10 +119,7 @@ const FarmerNotification = () => {
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   return (
-    <div
-      className="min-h-screen flex flex-col items-center bg-cover bg-center p-4 pt-28"
-      style={{ backgroundImage: "url('src/assets/background.jpg')" }}
-    >
+    <div className="min-h-screen flex flex-col items-center bg-green-100 p-4 pt-28">
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Notifications</h1>

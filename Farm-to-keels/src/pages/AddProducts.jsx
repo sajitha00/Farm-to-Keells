@@ -64,7 +64,9 @@ const AddProducts = () => {
     >
       {/* Form Container */}
       <div className="bg-white bg-opacity-80 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md text-center relative">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Add New Product</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">
+          Add New Product
+        </h2>
 
         {/* Input Form */}
         <form className="space-y-5" onSubmit={handleSubmit}>
@@ -87,7 +89,9 @@ const AddProducts = () => {
               className="px-4 py-2.5 border rounded-2xl bg-white focus:outline-none focus:ring-4 focus:ring-green-400"
               required
             >
-              <option value="" disabled>Select Product Type</option>
+              <option value="" disabled>
+                Select Product Type
+              </option>
               <option value="Vegetables">Vegetables</option>
               <option value="Fruits">Fruits</option>
             </select>

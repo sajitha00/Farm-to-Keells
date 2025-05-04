@@ -55,13 +55,6 @@ function AdminLogin() {
               />
             </div>
 
-            <a
-              href="#"
-              className="text-sm text-gray-600 hover:text-blue-800 font-semibold"
-            >
-              Forgotten password?
-            </a>
-
             <button
               type="submit"
               className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition mt-2 mb-2"

@@ -99,13 +99,6 @@ function FarmerLogin() {
               </div>
             </div>
 
-            <a
-              href="#"
-              className="text-sm text-gray-600 hover:text-blue-800 font-semibold"
-            >
-              Forgotten password?
-            </a>
-
             <button
               type="submit"
               className={`w-full ${

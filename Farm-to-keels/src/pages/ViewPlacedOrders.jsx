@@ -15,7 +15,8 @@ const ViewPlacedOrders = () => {
     try {
       const { data, error } = await supabase
         .from("orders")
-        .select(`
+        .select(
+          `
           id,
           farmer_id,
           order_date,
@@ -23,7 +24,8 @@ const ViewPlacedOrders = () => {
           total_amount,
           items,
           farmers:farmer_id(full_name, phone_number, email, avatar_url)
-        `)
+        `
+        )
         .order("order_date", { ascending: false });
 
       if (error) throw error;
@@ -58,9 +60,7 @@ const ViewPlacedOrders = () => {
   }, []);
 
   return (
-    <div
-      className="min-h-screen flex flex-col items-center bg-gradient-to-r from-green-100 to-green-300 p-4 pt-32"
-    >
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-r from-green-100 to-green-300 p-4 pt-32">
       {/* Main Container */}
       <div className="w-full max-w-7xl bg-white bg-opacity-80 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-2xl relative">
         {/* Back Button */}
@@ -78,11 +78,15 @@ const ViewPlacedOrders = () => {
 
         {/* Content */}
         {loading ? (
-          <div className="text-center text-gray-600 text-lg">Loading orders...</div>
+          <div className="text-center text-gray-600 text-lg">
+            Loading orders...
+          </div>
         ) : error ? (
           <div className="text-center text-red-500 text-lg">Error: {error}</div>
         ) : orders.length === 0 ? (
-          <div className="text-center text-gray-600 text-lg">No orders found.</div>
+          <div className="text-center text-gray-600 text-lg">
+            No orders found.
+          </div>
         ) : (
           <div className="overflow-x-auto rounded-2xl shadow-inner">
             <table className="min-w-full text-sm md:text-base border-collapse">
@@ -109,7 +113,9 @@ const ViewPlacedOrders = () => {
                         : "bg-white hover:bg-gray-50"
                     }`}
                   >
-                    <td className="p-2 md:p-4 font-mono">{order.id.slice(0, 8)}...</td>
+                    <td className="p-2 md:p-4 font-mono">
+                      {order.id.slice(0, 8)}...
+                    </td>
                     <td className="p-2 md:p-4">
                       <div className="flex flex-col md:flex-row md:items-center gap-2">
                         {order.farmers?.avatar_url && (
@@ -120,18 +126,27 @@ const ViewPlacedOrders = () => {
                           />
                         )}
                         <div>
-                          <div className="font-semibold">{order.farmers?.full_name || "Unknown"}</div>
-                          <div className="text-xs text-gray-500">{order.farmers?.email || "No Email"}</div>
-                          <div className="text-xs text-gray-500">{order.farmers?.phone_number || "No Contact"}</div>
+                          <div className="font-semibold">
+                            {order.farmers?.full_name || "Unknown"}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {order.farmers?.email || "No Email"}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {order.farmers?.phone_number || "No Contact"}
+                          </div>
                         </div>
                       </div>
                     </td>
-                    <td className="p-2 md:p-4">{new Date(order.order_date).toLocaleString()}</td>
+                    <td className="p-2 md:p-4">
+                      {new Date(order.order_date).toLocaleString()}
+                    </td>
                     <td className="p-2 md:p-4">
                       <ul className="list-disc pl-4 space-y-1">
                         {order.items.map((item, index) => (
                           <li key={index}>
-                            {item.product_name} ({item.quantity} × LKR {item.price})
+                            {item.product_name} ({item.quantity} × LKR{" "}
+                            {item.price})
                           </li>
                         ))}
                       </ul>
@@ -156,13 +171,17 @@ const ViewPlacedOrders = () => {
                       {order.status === "pending" && (
                         <div className="flex flex-col md:flex-row gap-2 md:gap-3">
                           <button
-                            onClick={() => updateOrderStatus(order.id, "completed")}
+                            onClick={() =>
+                              updateOrderStatus(order.id, "completed")
+                            }
                             className="bg-green-500 hover:bg-green-600 text-white font-semibold px-3 py-1 rounded-full text-xs md:text-sm transition"
                           >
                             Complete
                           </button>
                           <button
-                            onClick={() => updateOrderStatus(order.id, "cancelled")}
+                            onClick={() =>
+                              updateOrderStatus(order.id, "cancelled")
+                            }
                             className="bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-1 rounded-full text-xs md:text-sm transition"
                           >
                             Cancel
