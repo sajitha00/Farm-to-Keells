@@ -90,9 +90,9 @@ const AdminGuide = () => {
         <div className="flex justify-center mt-10">
           <button
             onClick={() => navigate("/SuperMarketDashboard")}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition"
+            className="bg-gray-500 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-xl transition"
           >
-            ⬅ Back to Dashboard
+            Back to Dashboard
           </button>
         </div>
       </div>

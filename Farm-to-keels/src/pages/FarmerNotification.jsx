@@ -205,7 +205,7 @@ const FarmerNotification = () => {
                   >
                     Mark as Read
                   </button>
-                  {notification.order_id && (
+                  {/* {notification.order_id && (
                     <button
                       onClick={() =>
                         navigate(`/order-details/${notification.order_id}`)
@@ -214,7 +214,7 @@ const FarmerNotification = () => {
                     >
                       View Full Order
                     </button>
-                  )}
+                  )} */}
                 </div>
               </div>
             ))}

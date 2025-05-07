@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFarmer } from "../context/FarmerProvider";
 import { supabase } from "../services/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 const ViewProduct = () => {
   const { farmer } = useFarmer();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -112,76 +114,99 @@ const ViewProduct = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center bg-cover bg-center p-4 pt-26"
+      className="min-h-screen flex flex-col items-center bg-cover bg-center p-6 pt-28"
       style={{ backgroundImage: "url('src/assets/background.jpg')" }}
     >
-      <div className="bg-white bg-opacity-70 backdrop-blur-lg p-6 rounded-2xl shadow-lg w-full max-w-4xl">
-        <h2 className="text-2xl font-bold text-center mb-6">Your Products</h2>
+      <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl w-full max-w-4xl">
+        <div className="flex justify-between items-center mb-8">
+          <button
+            onClick={() => navigate("/FarmerDashboard")}
+            className="bg-gray-600 hover:bg-gray-800 text-white px-4 py-2 rounded-full transition-all duration-200 shadow-md"
+          >
+            Back
+          </button>
+          <h2 className="text-3xl font-bold text-center flex-1 text-green-800">
+            Your Products
+          </h2>
+          <div className="w-24"></div> {/* Spacer for balance */}
+        </div>
 
         {products?.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-lg">
+          <div className="text-center py-12 bg-white/50 rounded-2xl">
+            <p className="text-lg text-gray-700">
               No products found. Add your first product!
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-green-600 text-white">
-                  <th className="p-3 text-left">Product</th>
-                  <th className="p-3 text-left">Type</th>
-                  <th className="p-3 text-left">Quantity (kg)</th>
-                  <th className="p-3 text-left">Price (LKR)</th>
-                  <th className="p-3 text-left">Location</th>
-                  <th className="p-3 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products?.map((product, index) => (
-                  <tr
-                    key={product.id}
-                    className={`border-b ${
-                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                    } hover:bg-gray-100 transition`}
-                  >
-                    <td className="p-3">{product.product_name}</td>
-                    <td className="p-3">{product.product_type}</td>
-                    <td className="p-3">{product.quantity}</td>
-                    <td className="p-3">{product.price}</td>
-                    <td className="p-3">{product.state}</td>
-                    <td className="p-3 flex gap-2">
-                      <button
-                        onClick={() => handleEdit(product)}
-                        className="bg-orange-400 text-white px-3 py-1 rounded-lg hover:bg-orange-500 transition text-sm sm:px-4 sm:py-2 sm:text-base"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(product.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition text-sm sm:px-4 sm:py-2 sm:text-base"
-                        disabled={deleteMutation.isLoading}
-                      >
-                        {deleteMutation.isLoading ? "Deleting..." : "Delete"}
-                      </button>
-                    </td>
+          <div className="overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-green-600 text-white">
+                    <th className="p-4 text-left font-semibold">Product</th>
+                    <th className="p-4 text-left font-semibold">Type</th>
+                    <th className="p-4 text-left font-semibold">
+                      Quantity (kg)
+                    </th>
+                    <th className="p-4 text-left font-semibold">Price (LKR)</th>
+                    <th className="p-4 text-left font-semibold">Location</th>
+                    <th className="p-4 text-left font-semibold">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {products?.map((product, index) => (
+                    <tr
+                      key={product.id}
+                      className={`border-b ${
+                        index % 2 === 0 ? "bg-white/70" : "bg-gray-50/70"
+                      } hover:bg-gray-100/80 transition duration-150`}
+                    >
+                      <td className="p-4">{product.product_name}</td>
+                      <td className="p-4">{product.product_type}</td>
+                      <td className="p-4">{product.quantity}</td>
+                      <td className="p-4">{product.price}</td>
+                      <td className="p-4">{product.state}</td>
+                      <td className="p-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(product)}
+                            className="bg-orange-400 text-white px-4 py-2 rounded-lg hover:bg-orange-500 transition-all duration-200 transform hover:scale-105 shadow-sm"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(product.id)}
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200 transform hover:scale-105 shadow-sm"
+                            disabled={deleteMutation.isLoading}
+                          >
+                            {deleteMutation.isLoading
+                              ? "Deleting..."
+                              : "Delete"}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
 
       {/* Modal for Editing Product */}
       {isEditModalOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center">
-          <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4">Edit Product</h3>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center p-4">
+          <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md">
+            <h3 className="text-2xl font-bold mb-6 text-green-800">
+              Edit Product
+            </h3>
 
-            <div className="flex flex-col space-y-4 text-left">
+            <div className="flex flex-col space-y-4">
               <div>
-                <label className="font-semibold">Product</label>
+                <label className="font-semibold text-gray-700 block mb-1">
+                  Product Name
+                </label>
                 <input
                   type="text"
                   value={editingProduct.product_name}
@@ -189,17 +214,19 @@ const ViewProduct = () => {
                     handleEditChange("product_name", e.target.value)
                   }
                   placeholder="Product Name"
-                  className="border p-2 rounded-lg w-full"
+                  className="border border-gray-300 p-3 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                 />
               </div>
               <div>
-                <label className="font-semibold">Product Type</label>
+                <label className="font-semibold text-gray-700 block mb-1">
+                  Product Type
+                </label>
                 <select
                   value={editingProduct.product_type}
                   onChange={(e) =>
                     handleEditChange("product_type", e.target.value)
                   }
-                  className="border p-2 rounded-lg w-full"
+                  className="border border-gray-300 p-3 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                 >
                   <option value="">Select Product Type</option>
                   <option value="Vegetables">Vegetables</option>
@@ -207,37 +234,41 @@ const ViewProduct = () => {
                 </select>
               </div>
               <div>
-                <label className="font-semibold">Supply Quantity (Kg)</label>
+                <label className="font-semibold text-gray-700 block mb-1">
+                  Supply Quantity (Kg)
+                </label>
                 <input
                   type="number"
                   value={editingProduct.quantity}
                   onChange={(e) => handleEditChange("quantity", e.target.value)}
                   placeholder="Supply Quantity (Kg)"
-                  className="border p-2 rounded-lg w-full"
+                  className="border border-gray-300 p-3 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                 />
               </div>
               <div>
-                <label className="font-semibold">Average Price (LKR)</label>
+                <label className="font-semibold text-gray-700 block mb-1">
+                  Average Price (LKR)
+                </label>
                 <input
                   type="number"
                   value={editingProduct.price}
                   onChange={(e) => handleEditChange("price", e.target.value)}
                   placeholder="Average Price (LKR)"
-                  className="border p-2 rounded-lg w-full"
+                  className="border border-gray-300 p-3 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                 />
               </div>
 
-              <div className="flex justify-between pt-4">
+              <div className="flex justify-between pt-6">
                 <button
                   onClick={handleUpdate}
-                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                  className="bg-green-500 text-white px-6 py-2.5 rounded-xl hover:bg-green-600 transition-all duration-200 transform hover:scale-105 shadow-sm"
                   disabled={updateMutation.isPending}
                 >
                   {updateMutation.isPending ? "Updating..." : "Update"}
                 </button>
                 <button
                   onClick={() => setEditModalOpen(false)}
-                  className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                  className="bg-gray-400 text-white px-6 py-2.5 rounded-xl hover:bg-gray-500 transition-all duration-200 transform hover:scale-105 shadow-sm"
                 >
                   Cancel
                 </button>
