@@ -121,7 +121,7 @@ const ViewProduct = () => {
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={() => navigate("/FarmerDashboard")}
-            className="bg-gray-600 hover:bg-gray-800 text-white px-4 py-2 rounded-full transition-all duration-200 shadow-md"
+            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
           >
             Back
           </button>
