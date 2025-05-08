@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
+import { useNavigate } from "react-router-dom";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const Contact = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,6 +54,10 @@ const Contact = () => {
       setError("Failed to send your inquiry. Please try again.");
       setSuccess("");
     }
+  };
+
+  const handleBack = () => {
+    navigate("/");
   };
 
   return (
@@ -111,11 +117,19 @@ const Contact = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold py-3 px-6 rounded-3xl shadow-lg transition duration-300"
+            className="w-full bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold py-3 px-6 rounded-3xl shadow-lg transition duration-300 mb-4"
           >
             Send Inquiry
           </button>
         </form>
+
+        {/* Back Button */}
+        <button
+          onClick={handleBack}
+          className="w-full bg-gradient-to-r from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-3xl shadow-lg transition duration-300 mb-4"
+        >
+          Back to Home
+        </button>
       </div>
     </div>
   );

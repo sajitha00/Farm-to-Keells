@@ -15,16 +15,18 @@ const AboutUs = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-10">
           {/* Text Section */}
           <div className="max-w-md text-center md:text-left">
-            <p className="text-red-600 font-semibold tracking-wide uppercase">
+            <p className="text-teal-600 font-semibold tracking-wide uppercase">
               A Bit
             </p>
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">About Us</h1>
-            <p className="text-gray-600 mb-6">
+            <h1 className="text-5xl font-extrabold text-gray-900 mb-4">
+              About Us
+            </h1>
+            <p className="text-gray-700 mb-6 leading-relaxed">
               We are <strong>Keells Super</strong>, a leading supermarket chain
-              in Sri Lanka, powered by the John Keells Group.This project our
-              mission is to eliminate intermediaries and build a direct farm to
-              supermarket selling system. This empowers local farmers and
-              ensures freshness and fair pricing for everyone.
+              in Sri Lanka, powered by the John Keells Group. Our mission is to
+              eliminate intermediaries and build a direct farm-to-supermarket
+              selling system. This empowers local farmers and ensures freshness
+              and fair pricing for everyone.
             </p>
 
             {/* Button Section */}
@@ -33,15 +35,15 @@ const AboutUs = () => {
                 href="https://www.keellssuper.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-teal-600 text-white px-6 py-3 rounded-lg shadow hover:bg-teal-700 transition"
+                className="bg-teal-500 text-white px-6 py-3 rounded-lg shadow hover:bg-teal-600 transition-transform transform hover:scale-105"
               >
                 Explore More
               </a>
               <button
                 onClick={() => navigate(-1)}
-                className="bg-green-100 hover:bg-green-200 text-green-800 font-medium px-6 py-3 rounded-lg transition"
+                className="bg-gray-500 hover:bg-gray-700 text-white font-medium px-6 py-3 rounded-lg transition-transform transform hover:scale-105"
               >
-                ← Back
+                Back
               </button>
             </div>
           </div>
@@ -51,17 +53,17 @@ const AboutUs = () => {
             <img
               src="src/assets/about1.jpg"
               alt="Farmer hiking"
-              className="rounded-xl w-full h-36 object-cover"
+              className="rounded-xl w-full h-40 object-cover transition-transform transform hover:scale-105"
             />
             <img
               src="src/assets/about2.jpeg"
               alt="Farmer market"
-              className="rounded-xl w-full h-36 object-cover"
+              className="rounded-xl w-full h-40 object-cover transition-transform transform hover:scale-105"
             />
             <img
               src="src/assets/about3.jpg"
               alt="Farmland"
-              className="rounded-xl w-full h-36 object-cover col-span-2"
+              className="rounded-xl w-full h-40 object-cover col-span-2 transition-transform transform hover:scale-105"
             />
           </div>
         </div>
