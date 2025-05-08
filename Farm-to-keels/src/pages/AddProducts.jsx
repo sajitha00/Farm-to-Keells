@@ -130,7 +130,6 @@ const AddProducts = () => {
             />
           </div>
 
-          {/* Action Buttons */}
           <div className="flex justify-between mt-6">
             <button
               type="button"
@@ -157,7 +156,7 @@ const AddProducts = () => {
         className="absolute bottom-8 left-8 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-2xl transition"
         disabled={mutation.isPending}
       >
-        ← Back
+        Back
       </button>
     </div>
   );

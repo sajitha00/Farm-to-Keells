@@ -24,9 +24,9 @@ const AboutUs = () => {
             <p className="text-gray-700 mb-6 leading-relaxed">
               We are <strong>Keells Super</strong>, a leading supermarket chain
               in Sri Lanka, powered by the John Keells Group. Our mission is to
-              eliminate intermediaries and build a direct farm-to-supermarket
-              selling system. This empowers local farmers and ensures freshness
-              and fair pricing for everyone.
+              eliminate intermediaries and build a direct Farm to Supermarket
+              direct selling system. This empowers local farmers and ensures
+              freshness and fair pricing for everyone.
             </p>
 
             {/* Button Section */}
